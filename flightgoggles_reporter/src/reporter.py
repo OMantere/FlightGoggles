@@ -90,7 +90,7 @@ class ReporterNode():
 		signal.signal(signal.SIGINT, self.signalHandler)
 
 		# Read the events from the challenge params
-		name=rospy.get_param('/uav/challenge_name', '')
+		name=rospy.get_param('/challenge_name', '')
 		if (name == ''):
 			rospy.logerr("Challenge name could not be read")
 			rospy.signal_shutdown("Challenge parameter [name] could not be read")
@@ -98,7 +98,7 @@ class ReporterNode():
 		rospy.loginfo("Running challenge %s", name)
 
 		# Set a timeout to check if challenge is taking longer than allowed
-		timeout = rospy.get_param('/uav/timeout', -1)
+		timeout = rospy.get_param('/timeout', -1)
 		if (timeout == -1):
 			rospy.logerr("Timeout not specified!")
 			rospy.signal_shutdown("Challenge parameter [timeout] could not be read")
@@ -109,15 +109,15 @@ class ReporterNode():
 		inflation = rospy.get_param("/uav/inflation", 0.1)
 
 		# Load the required list of events from the config
-		events = rospy.get_param("/uav/gate_names", '[]')
-		eventTol = rospy.get_param("/uav/gate_width", 1.0)
+		events = rospy.get_param("/gate_names", '[]')
+		eventTol = rospy.get_param("/gate_width", 1.0)
 
-		self.fname = rospy.get_param("/uav/results_location", "results.yaml")
+		self.fname = rospy.get_param("/results_location", "results.yaml")
 
 		# Make gate objects to detect fly throughs later
 		gates = []
 		for e in events:
-			loc = np.asarray(rospy.get_param("/uav/%s/location"%e, "[]"))
+			loc = np.asarray(rospy.get_param("/%s/location"%e, "[]"))
 			if (loc.shape[0] !=4 or loc.shape[1] != 3):
 				rospy.logerr("Location not specified in correct format")
 				rospy.signal_shutdown("Location not specified in correct format")
